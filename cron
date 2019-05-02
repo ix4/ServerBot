@@ -1,0 +1,6 @@
+#30 min - server warn bot
+*/30 * * * * bash bot/bot.sh
+
+#send msg on reboot
+@reboot bash bot/boot.sh
+
