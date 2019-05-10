@@ -1,7 +1,4 @@
 #!/bin/bash
-token="APItoken"
-userid="usernameorid"
-
 #1. arg = text
 send() {
 	echo "Sending $1 to ${userid}"
