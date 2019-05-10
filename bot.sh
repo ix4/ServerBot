@@ -19,9 +19,19 @@ if [ "$notrunning" != "" ]; then
 	send "warnung%20the%20following%20services%20are%20not%20running%20$notrunning"
 fi
 
+#cpu usage
 . cpu.sh
 cpu=$(cpuUsage)
 if [ "$cpu" -gt "$cpulimit" ]; then
 	echo "cpu limit!"
  	send "warnung%20CPU%20Usage%20is%20high%20$cpu"
 fi
+
+#mem usage
+. mem.sh
+mem=$(memUsage)
+if [ "$mem" -gt "$memlimit" ]; then
+	echo "mem limit!"
+	send "warnung%20Memory%20Usage%20is%20high%20$mem%25"
+fi
+

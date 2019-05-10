@@ -15,3 +15,5 @@ hddlimit="50"
 
 #harddrive
 hdd="/dev/sda1"
+
+memlimit="90"
