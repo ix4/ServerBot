@@ -17,3 +17,5 @@ hddlimit="50"
 hdd="/dev/sda1"
 
 memlimit="90"
+
+certlimit="1 week"

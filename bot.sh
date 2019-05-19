@@ -35,3 +35,10 @@ if [ "$mem" -gt "$memlimit" ]; then
 	send "warnung%20Memory%20Usage%20is%20high%20$mem%25"
 fi
 
+#CheckCerts
+. cert.sh
+checkCert "/etc/letsencrypt/live/mrbesen.de/cert.pem"
+if [ "$?" -gt "0" ]; then
+	echo "cert expired!"
+	send "warnung%20cert%20expires%20soon"
+fi
