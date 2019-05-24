@@ -1,6 +1,11 @@
 #!/bin/bash
 # the main bot script
 
+# change dir
+cd "$( dirname "${BASH_SOURCE[0]}" )"
+echo "pwd: "
+pwd
+
 . config.sh
 . func.sh
 
