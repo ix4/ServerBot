@@ -17,6 +17,8 @@ if [ "$used" -gt "$hddlimit" ]; then
 	hddTop=$(hddTop)
 	send "warnung server used $used% of the storage $hddTop"
 fi
+unset -f hddTop
+unset -f hddUsage
 
 #services
 . services.sh
@@ -25,6 +27,7 @@ if [ "$notrunning" != "" ]; then
 	echo "Serive warn!"
 	send "warnung%20the%20following%20services%20are%20not%20running%20$notrunning"
 fi
+unset -f checkServices
 
 #cpu usage
 . cpu.sh
@@ -34,6 +37,8 @@ if [ "$cpu" -gt "$cpulimit" ]; then
 	proc=$(cpuTop)
 	send "warnung%20CPU%20Usage%20is%20high%20$cpu%25%0A$proc"
 fi
+unset -f cpuUsage
+unset -f cpuTop
 
 #mem usage
 . mem.sh
@@ -43,6 +48,8 @@ if [ "$mem" -gt "$memlimit" ]; then
 	proc=$(memTop)
 	send "warnung%20Memory%20Usage%20is%20high%20$mem%25%0A$proc"
 fi
+unset -f memUsage
+unset -f memTop
 
 #CheckCerts
 . cert.sh
@@ -51,3 +58,4 @@ if [ "$?" -gt "0" ]; then
 	echo "cert expired!"
 	send "warnung%20cert%20expires%20soon"
 fi
+unset -f checkCert
