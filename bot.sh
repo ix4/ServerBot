@@ -29,7 +29,8 @@ fi
 cpu=$(cpuUsage)
 if [ "$cpu" -gt "$cpulimit" ]; then
 	echo "cpu limit!"
- 	send "warnung%20CPU%20Usage%20is%20high%20$cpu"
+	proc=$(cpuHighest)
+	send "warnung%20CPU%20Usage%20is%20high%20$cpu%25%0A$proc"
 fi
 
 #mem usage
@@ -37,7 +38,8 @@ fi
 mem=$(memUsage)
 if [ "$mem" -gt "$memlimit" ]; then
 	echo "mem limit!"
-	send "warnung%20Memory%20Usage%20is%20high%20$mem%25"
+	proc=$(memHighest)
+	send "warnung%20Memory%20Usage%20is%20high%20$mem%25%0A$proc"
 fi
 
 #CheckCerts
