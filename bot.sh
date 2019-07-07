@@ -10,10 +10,12 @@ pwd
 . func.sh
 
 #hdd usage
-used=$(df --output=pcent $hdd | tail -1 | grep -Po "(\\d+)" --color=never)
+. hdd.sh
+used=$(hddUsage)
 if [ "$used" -gt "$hddlimit" ]; then
 	echo "warn!"
-	send "warnung%20server%20used%20$used%25%20of%20the%20storage!"
+	hddTop=$(hddTop)
+	send "warnung server used $used% of the storage $hddTop"
 fi
 
 #services
@@ -29,7 +31,7 @@ fi
 cpu=$(cpuUsage)
 if [ "$cpu" -gt "$cpulimit" ]; then
 	echo "cpu limit!"
-	proc=$(cpuHighest)
+	proc=$(cpuTop)
 	send "warnung%20CPU%20Usage%20is%20high%20$cpu%25%0A$proc"
 fi
 
@@ -38,7 +40,7 @@ fi
 mem=$(memUsage)
 if [ "$mem" -gt "$memlimit" ]; then
 	echo "mem limit!"
-	proc=$(memHighest)
+	proc=$(memTop)
 	send "warnung%20Memory%20Usage%20is%20high%20$mem%25%0A$proc"
 fi
 
