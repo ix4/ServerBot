@@ -7,15 +7,18 @@ echo "pwd: "
 pwd
 
 . config.sh
-. func.sh
+#. func.sh
+msg="a"
+ident="" # variable to identify changes in the problems
 
 #hdd usage
 . hdd.sh
 used=$(hddUsage)
 if [ "$used" -gt "$hddlimit" ]; then
-	echo "warn!"
+	echo "HDD warn!"
 	hddTop=$(hddTop)
-	send "warnung server used $used% of the storage $hddTop"
+	printf -v msg '%b\n\nwarnung server used %b%% of the storage\n%b' "${msg}" "$used" "$hddTop"
+	ident="$ident:hdd"
 fi
 unset -f hddTop
 unset -f hddUsage
@@ -25,7 +28,8 @@ unset -f hddUsage
 notrunning=$(checkServices "$services")
 if [ "$notrunning" != "" ]; then
 	echo "Serive warn!"
-	send "warnung%20the%20following%20services%20are%20not%20running%20$notrunning"
+	printf -v msg '%b\n\nwarnung the following services are not running\n%b' "${msg}" "$notrunning"
+	ident="$ident:$notrunning"
 fi
 unset -f checkServices
 
@@ -35,7 +39,8 @@ cpu=$(cpuUsage)
 if [ "$cpu" -gt "$cpulimit" ]; then
 	echo "cpu limit!"
 	proc=$(cpuTop)
-	send "warnung%20CPU%20Usage%20is%20high%20$cpu%25%0A$proc"
+	printf -v msg '%b\n\nwarnung CPU Usage is high %b%%\n%b' "${msg}" "$cpu" "$proc"
+	ident="$ident:cpu"
 fi
 unset -f cpuUsage
 unset -f cpuTop
@@ -46,7 +51,8 @@ mem=$(memUsage)
 if [ "$mem" -gt "$memlimit" ]; then
 	echo "mem limit!"
 	proc=$(memTop)
-	send "warnung%20Memory%20Usage%20is%20high%20$mem%25%0A$proc"
+	printf -v msg '%b\n\nwarnung Memory Usage is high %b%%\n%b' "${msg}" "$mem" "$proc"
+	ident="$ident:mem"
 fi
 unset -f memUsage
 unset -f memTop
@@ -56,6 +62,16 @@ unset -f memTop
 checkCert "/etc/letsencrypt/live/mrbesen.de/cert.pem"
 if [ "$?" -gt "0" ]; then
 	echo "cert expired!"
-	send "warnung%20cert%20expires%20soon"
+	printf -v msg '%b\n\nwarnung cert expires soon' "${msg}"
+	ident="$ident:cert"
 fi
 unset -f checkCert
+
+. func.sh
+if [[ "${#msg}" -gt "1" ]]; then
+	#remove prepend
+	msg=$(echo "$msg" | tail -n +3)
+	send "$ident" "$msg"
+else
+	resetFile
+fi
